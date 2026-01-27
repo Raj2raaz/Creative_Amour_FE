@@ -6,7 +6,6 @@ import api from '../../utils/api';
 import { dummyCategories, dummyProducts, getProductsByCategory } from '../../data/dummyData';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import '../Home/Home.css';
 
 const Products = () => {
   const [products, setProducts] = useState(dummyProducts);
@@ -93,49 +92,36 @@ const Products = () => {
   };
 
   return (
-    <div className="home" style={{ padding: '40px 0' }}>
-      <div className="container">
-        <h1 className="section-title">Our Products</h1>
+    <div className="w-full bg-[#fef8f5] py-10">
+      <div className="max-w-7xl mx-auto px-5">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-10 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Our Products
+        </h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '30px', alignItems: 'start' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
           {/* Left Sidebar - Filters */}
-          <div className="products-sidebar" style={{ 
-            backgroundColor: 'white', 
-            padding: '25px', 
-            borderRadius: '12px', 
-            boxShadow: 'var(--shadow)',
-            position: 'sticky',
-            top: '100px'
-          }}>
-            <h3 style={{ marginBottom: '20px', fontSize: '20px', color: 'var(--accent-color)' }}>
-              Filters
-            </h3>
+          <div className="bg-white p-6 rounded-xl shadow-lg lg:sticky lg:top-24 h-fit">
+            <h3 className="text-xl font-semibold text-accent mb-5">Filters</h3>
 
             {/* Search */}
-            <div className="form-group" style={{ marginBottom: '20px' }}>
-              <label className="form-label" style={{ fontWeight: '600', marginBottom: '8px', display: 'block' }}>
-                Search
-              </label>
+            <div className="mb-5">
+              <label className="block font-semibold mb-2 text-gray-700">Search</label>
               <input
                 type="text"
-                className="form-input"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
                 placeholder="Search products..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
-                style={{ width: '100%' }}
               />
             </div>
 
             {/* Category */}
-            <div className="form-group" style={{ marginBottom: '20px' }}>
-              <label className="form-label" style={{ fontWeight: '600', marginBottom: '8px', display: 'block' }}>
-                Category
-              </label>
+            <div className="mb-5">
+              <label className="block font-semibold mb-2 text-gray-700">Category</label>
               <select
-                className="form-select"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors bg-white"
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                style={{ width: '100%' }}
               >
                 <option value="">All Categories</option>
                 {categories.map(cat => (
@@ -145,41 +131,34 @@ const Products = () => {
             </div>
 
             {/* Price Range */}
-            <div style={{ marginBottom: '20px' }}>
-              <label className="form-label" style={{ fontWeight: '600', marginBottom: '8px', display: 'block' }}>
-                Price Range
-              </label>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div className="mb-5">
+              <label className="block font-semibold mb-2 text-gray-700">Price Range</label>
+              <div className="flex gap-2 items-center">
                 <input
                   type="number"
-                  className="form-input"
+                  className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   placeholder="Min"
                   value={filters.minPrice}
                   onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                  style={{ flex: 1 }}
                 />
-                <span>-</span>
+                <span className="text-gray-500">-</span>
                 <input
                   type="number"
-                  className="form-input"
+                  className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   placeholder="Max"
                   value={filters.maxPrice}
                   onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                  style={{ flex: 1 }}
                 />
               </div>
             </div>
 
             {/* Sort By */}
-            <div className="form-group" style={{ marginBottom: '20px' }}>
-              <label className="form-label" style={{ fontWeight: '600', marginBottom: '8px', display: 'block' }}>
-                Sort By
-              </label>
+            <div className="mb-5">
+              <label className="block font-semibold mb-2 text-gray-700">Sort By</label>
               <select
-                className="form-select"
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors bg-white"
                 value={filters.sortBy}
                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                style={{ width: '100%' }}
               >
                 <option value="createdAt">Newest</option>
                 <option value="price">Price: Low to High</option>
@@ -202,17 +181,7 @@ const Products = () => {
                   });
                   setSearchParams({});
                 }}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  backgroundColor: 'var(--bg-light)',
-                  border: '2px solid var(--secondary-color)',
-                  color: 'var(--secondary-color)',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
+                className="w-full py-2.5 bg-bg-light border-2 border-secondary text-secondary rounded-lg font-semibold text-sm hover:bg-secondary hover:text-white transition-colors"
               >
                 Clear All Filters
               </button>
@@ -223,25 +192,13 @@ const Products = () => {
           <div>
             {/* Search Info Banner */}
             {filters.search && (
-              <div style={{
-                backgroundColor: '#e8f4f8',
-                padding: '12px 20px',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <span>Showing results for: <strong>"{filters.search}"</strong></span>
+              <div className="bg-blue-50 px-5 py-3 rounded-lg mb-5 flex justify-between items-center">
+                <span className="text-gray-700">
+                  Showing results for: <strong>"{filters.search}"</strong>
+                </span>
                 <button
                   onClick={() => handleFilterChange('search', '')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--secondary-color)',
-                    cursor: 'pointer',
-                    fontWeight: '600'
-                  }}
+                  className="text-secondary font-semibold hover:underline"
                 >
                   Clear
                 </button>
@@ -249,45 +206,58 @@ const Products = () => {
             )}
 
             {/* Products Count */}
-            <div style={{ marginBottom: '20px', color: 'var(--text-light)' }}>
+            <div className="mb-5 text-gray-600">
               <strong>{products.length}</strong> products found
             </div>
 
             {/* Products Grid */}
             {loading ? (
-              <div className="spinner"></div>
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+              </div>
             ) : products.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-light)' }}>
-                <p>No products found</p>
+              <div className="text-center py-16 text-gray-500">
+                <p className="text-lg">No products found</p>
               </div>
             ) : (
-              <div className="products-grid">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map((product) => (
                   <div
                     key={product._id}
-                    className="product-card"
+                    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                     onClick={() => navigate(`/products/${product._id}`)}
                   >
-                    <img
-                      src={product.images[0]?.url || 'https://via.placeholder.com/300'}
-                      alt={product.name}
-                      className="product-image"
-                    />
-                    <div className="product-info">
-                      <h3 className="product-name">{product.name}</h3>
-                      <div className="product-price">₹{product.discountPrice || product.price}</div>
-                      <div className="product-rating">
-                        <span className="stars">
+                    <div className="relative overflow-hidden h-64">
+                      <img
+                        src={product.images[0]?.url || 'https://via.placeholder.com/300'}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <div className="text-2xl font-bold text-secondary mb-2">
+                        ₹{product.discountPrice || product.price}
+                      </div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex gap-0.5">
                           {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} color={i < Math.round(product.rating || product.ratings?.average || 0) ? '#ffa500' : '#ddd'} />
-                            ))}
-                          </span>
-                          <span>({product.numReviews || product.ratings?.count || 0})</span>
+                            <FaStar 
+                              key={i} 
+                              className={i < Math.round(product.rating || product.ratings?.average || 0) ? 'text-yellow-500' : 'text-gray-300'} 
+                              size={16}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          ({product.numReviews || product.ratings?.count || 0})
+                        </span>
                       </div>
                       <button
-                        className="btn btn-primary"
+                        className="w-full py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                         onClick={(e) => handleAddToCart(e, product._id)}
-                        style={{ width: '100%', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                       >
                         <FaShoppingCart />
                         Add to Cart

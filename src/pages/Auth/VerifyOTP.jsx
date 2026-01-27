@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
-import './Auth.css';
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -75,20 +74,22 @@ const VerifyOTP = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Verify Email</h2>
-        <p style={{ textAlign: 'center', color: 'var(--text-light)', marginBottom: '20px' }}>
+    <div className="min-h-screen bg-[#fef8f5] flex items-center justify-center py-12 px-4">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Verify Email
+        </h2>
+        <p className="text-center text-gray-600 mb-8">
           Please enter the 6-digit OTP sent to {email}
         </p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="otp-inputs">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex gap-2 justify-center">
             {otp.map((digit, index) => (
               <input
                 key={index}
                 type="text"
-                className="otp-input"
+                className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                 maxLength="1"
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
@@ -99,16 +100,19 @@ const VerifyOTP = () => {
             ))}
           </div>
 
-          <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%' }}>
+          <button 
+            type="submit" 
+            className="w-full py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50" 
+            disabled={loading}
+          >
             {loading ? 'Verifying...' : 'Verify OTP'}
           </button>
 
           <button
             type="button"
-            className="btn btn-outline"
+            className="w-full py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50"
             onClick={handleResendOTP}
             disabled={resending}
-            style={{ width: '100%' }}
           >
             {resending ? 'Resending...' : 'Resend OTP'}
           </button>

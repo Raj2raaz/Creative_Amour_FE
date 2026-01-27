@@ -57,13 +57,13 @@ const Cart = () => {
 
   if (!user) {
     return (
-      <div className="container" style={{ padding: '100px 20px', textAlign: 'center' }}>
-        <FaShoppingBag size={64} color="var(--text-light)" style={{ marginBottom: '20px' }} />
-        <h2>Please Login</h2>
-        <p style={{ color: 'var(--text-light)', marginBottom: '30px' }}>
+      <div className="min-h-screen bg-[#fef8f5] flex flex-col items-center justify-center py-20 px-5">
+        <FaShoppingBag size={64} className="text-gray-400 mb-5" />
+        <h2 className="text-3xl font-bold text-gray-800 mb-3">Please Login</h2>
+        <p className="text-gray-600 mb-8 text-center max-w-md">
           You need to login to view your cart
         </p>
-        <button className="btn btn-primary" onClick={() => navigate('/login')}>
+        <button className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity" onClick={() => navigate('/login')}>
           Login
         </button>
       </div>
@@ -71,18 +71,22 @@ const Cart = () => {
   }
 
   if (loading) {
-    return <div className="spinner" style={{ margin: '100px auto' }}></div>;
+    return (
+      <div className="min-h-screen bg-[#fef8f5] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+      </div>
+    );
   }
 
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
-      <div className="container" style={{ padding: '100px 20px', textAlign: 'center' }}>
-        <FaShoppingBag size={64} color="var(--text-light)" style={{ marginBottom: '20px' }} />
-        <h2>Your Cart is Empty</h2>
-        <p style={{ color: 'var(--text-light)', marginBottom: '30px' }}>
+      <div className="min-h-screen bg-[#fef8f5] flex flex-col items-center justify-center py-20 px-5">
+        <FaShoppingBag size={64} className="text-gray-400 mb-5" />
+        <h2 className="text-3xl font-bold text-gray-800 mb-3">Your Cart is Empty</h2>
+        <p className="text-gray-600 mb-8 text-center max-w-md">
           Add some items to get started!
         </p>
-        <button className="btn btn-primary" onClick={() => navigate('/products')}>
+        <button className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity" onClick={() => navigate('/products')}>
           Continue Shopping
         </button>
       </div>

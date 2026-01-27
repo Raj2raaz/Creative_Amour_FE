@@ -24,7 +24,7 @@ const GoogleCallback = () => {
       setToken(token);
 
       // Fetch user data
-      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/me`, {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
