@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { FaStar, FaShoppingCart } from 'react-icons/fa';
+import { FaStar, FaShoppingCart, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import { dummyCategories, dummyProducts, getProductsByCategory } from '../../data/dummyData';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
 
 const Products = () => {
@@ -14,6 +15,7 @@ const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
 
   const handleAddToCart = async (e, productId) => {
@@ -30,6 +32,29 @@ const Products = () => {
       toast.success('Added to cart!');
     } catch (error) {
       toast.error(error.message || 'Failed to add to cart');
+    }
+  };
+
+  const handleWishlistToggle = async (e, productId) => {
+    e.stopPropagation();
+    
+    if (!user) {
+      toast.info('Please login to add items to wishlist');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      if (isInWishlist(productId)) {
+        await removeFromWishlist(productId);
+        toast.success('Removed from wishlist');
+      } else {
+        await addToWishlist(productId);
+        toast.success('Added to wishlist!');
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update wishlist';
+      toast.error(errorMessage);
     }
   };
 
@@ -224,14 +249,26 @@ const Products = () => {
                 {products.map((product) => (
                   <div
                     key={product._id}
-                    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer relative group"
                     onClick={() => navigate(`/products/${product._id}`)}
                   >
+                    {/* Wishlist Heart Button */}
+                    <button
+                      onClick={(e) => handleWishlistToggle(e, product._id)}
+                      className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
+                    >
+                      {isInWishlist(product._id) ? (
+                        <FaHeart className="text-red-500 text-xl" />
+                      ) : (
+                        <FaRegHeart className="text-gray-600 text-xl" />
+                      )}
+                    </button>
+
                     <div className="relative overflow-hidden h-64">
                       <img
                         src={product.images[0]?.url || 'https://via.placeholder.com/300'}
                         alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
                     <div className="p-4">

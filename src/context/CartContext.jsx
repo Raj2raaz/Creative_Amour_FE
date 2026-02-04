@@ -27,6 +27,11 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const { data } = await api.get('/cart');
+      console.log('Cart fetched:', data.cart);
+      if (data.cart?.items?.length > 0) {
+        console.log('First cart item:', data.cart.items[0]);
+        console.log('First product images:', data.cart.items[0].product?.images);
+      }
       setCart(data.cart);
     } catch (error) {
       console.error('Failed to fetch cart:', error);

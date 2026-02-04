@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaUser, FaBars, FaTimes, FaSearch } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
@@ -8,9 +8,59 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholder, setPlaceholder] = useState('');
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { cartItemsCount } = useCart();
   const navigate = useNavigate();
+
+  const placeholders = [
+    'Search for earrings...',
+    'Find acrylic paintings...',
+    'Discover keyrings...',
+    'Browse stickers & badges...',
+    'Search products...'
+  ];
+
+  useEffect(() => {
+    let currentIndex = 0;
+    let currentText = '';
+    let isDeleting = false;
+    let timeout;
+
+    const typeEffect = () => {
+      const fullText = placeholders[placeholderIndex];
+      
+      if (!isDeleting) {
+        currentText = fullText.substring(0, currentText.length + 1);
+        setPlaceholder(currentText);
+        
+        if (currentText === fullText) {
+          timeout = setTimeout(() => {
+            isDeleting = true;
+            typeEffect();
+          }, 2000); // Wait 2s before deleting
+          return;
+        }
+        timeout = setTimeout(typeEffect, 100); // Typing speed
+      } else {
+        currentText = fullText.substring(0, currentText.length - 1);
+        setPlaceholder(currentText);
+        
+        if (currentText === '') {
+          isDeleting = false;
+          setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+          timeout = setTimeout(typeEffect, 500); // Wait 0.5s before next
+          return;
+        }
+        timeout = setTimeout(typeEffect, 50); // Deleting speed (faster)
+      }
+    };
+
+    typeEffect();
+
+    return () => clearTimeout(timeout);
+  }, [placeholderIndex]);
 
   const handleLogout = () => {
     logout();
@@ -75,10 +125,10 @@ const Navbar = () => {
           <form onSubmit={handleSearch} className="w-full flex">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder={placeholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:border-primary transition-colors"
+              className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:border-primary transition-colors placeholder:text-gray-400"
             />
             <button 
               type="submit" 
@@ -104,10 +154,10 @@ const Navbar = () => {
             <form onSubmit={handleSearch} className="flex">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder={placeholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:border-primary"
+                className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:border-primary placeholder:text-gray-400"
               />
               <button 
                 type="submit" 

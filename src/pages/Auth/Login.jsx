@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../utils/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showResendOTP, setShowResendOTP] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -22,13 +25,38 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowResendOTP(false);
 
     try {
       await login(formData);
       toast.success('Login successful!');
       navigate('/');
     } catch (error) {
-      toast.error(error.message || 'Login failed');
+      // Proper error handling for axios responses
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+      
+      // Check if user needs to verify email
+      if (errorMessage.includes('verify your email')) {
+        setShowResendOTP(true);
+        setUnverifiedEmail(formData.email);
+        toast.error(errorMessage + ' Click below to resend OTP.');
+      } else {
+        toast.error(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      setLoading(true);
+      await api.post('/auth/resend-otp', { email: unverifiedEmail });
+      toast.success('OTP sent! Check your email.');
+      navigate('/verify-otp', { state: { email: unverifiedEmail } });
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to resend OTP';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -77,6 +105,21 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
+
+        {showResendOTP && (
+          <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg">
+            <p className="text-sm text-yellow-800 mb-2">
+              📧 Your email is not verified yet.
+            </p>
+            <button
+              onClick={handleResendOTP}
+              className="w-full py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50"
+              disabled={loading}
+            >
+              {loading ? 'Sending...' : 'Resend OTP & Verify Email'}
+            </button>
+          </div>
+        )}
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">

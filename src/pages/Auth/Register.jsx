@@ -46,7 +46,9 @@ const Register = () => {
       toast.success('Registration successful! Please verify your email with the OTP sent.');
       navigate('/verify-otp', { state: { userId: data.userId, email: formData.email } });
     } catch (error) {
-      toast.error(error.message || 'Registration failed');
+      // Proper error handling for axios responses
+      const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

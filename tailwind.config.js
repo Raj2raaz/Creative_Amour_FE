@@ -34,10 +34,57 @@ export default {
             transform: 'translateY(0)',
           },
         },
+        twinkle: {
+          '0%, 100%': { opacity: '0.2', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.5)' },
+        },
+        twinkleMove: {
+          '0%, 100%': { 
+            opacity: '0.3', 
+            transform: 'scale(1) translate(0, 0)',
+            filter: 'blur(2px)'
+          },
+          '25%': { 
+            opacity: '0.8', 
+            transform: 'scale(1.5) translate(3px, -3px)',
+            filter: 'blur(4px)'
+          },
+          '50%': { 
+            opacity: '1', 
+            transform: 'scale(2.2) translate(0, 0)',
+            filter: 'blur(5px)'
+          },
+          '75%': { 
+            opacity: '0.7', 
+            transform: 'scale(1.4) translate(-3px, 3px)',
+            filter: 'blur(4px)'
+          },
+        },
+        flash: {
+          '0%, 100%': { 
+            opacity: '0.2',
+            transform: 'scale(1)',
+            filter: 'blur(2px) brightness(1)'
+          },
+          '50%': { 
+            opacity: '1',
+            transform: 'scale(2.5)',
+            filter: 'blur(6px) brightness(2)'
+          },
+        },
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
         fadeInUp: 'fadeInUp 0.8s ease-out',
+        twinkle: 'twinkle 2s ease-in-out infinite',
+        twinkleMove: 'twinkleMove 1.5s ease-in-out infinite',
+        flash: 'flash 1.2s ease-in-out infinite',
+      },
+      fontFamily: {
+        sans: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        engagement: ['Engagement', 'cursive'],
       },
     },
   },
